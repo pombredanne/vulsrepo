@@ -4,9 +4,8 @@
 
 VulsRepo is visualized based on the json report output in [vuls](https://github.com/future-architect/vuls).
 
-YouTube:
 
-[![vulsrepo](http://img.youtube.com/vi/DIBPoik4owc/0.jpg)](https://youtu.be/DIBPoik4owc)
+<img src="https://raw.githubusercontent.com/usiusi360/vulsrepo/master/gallery/demo.gif" width="75%">
 
 ## Online Demo
 http://usiusi360.github.io/vulsrepo/
@@ -17,7 +16,8 @@ http://usiusi360.github.io/vulsrepo/
 ### Step1. Create a json report of vuls
 
 ````
-$ vuls scan -report-json --cve-dictionary-dbpath=/opt/vuls/cve.sqlite3
+$ vuls scan 
+$ vuls report -to-localfile -format-json --cvedb-path=/opt/vuls/cve.sqlite3  
 ````
 
 Output to a JSON files (/opt/vuls/results/current)
@@ -27,6 +27,8 @@ Apache HTTP Server is mentioned as installed one.
 
 ### Step3. Installation
 2 ways to setup.
+
+From now on , executed by a user running the vuls scan.
 
 #### A. Zip download
 
@@ -45,7 +47,28 @@ $ cd /var/www/html
 $ sudo git clone https://github.com/usiusi360/vulsrepo.git
 ````
 
-### Step4. The setting to make a CGI operate
+### Step4. Change the execution of the user group of apache
+Set to the same user as the user to run the vuls scan.
+
+```
+$ vi httpd.conf
+
+# If you wish httpd to run as a different user or group, you must run
+# httpd as root initially and it will switch.  
+#
+# User/Group: The name (or #number) of the user/group to run httpd as.
+# It is usually good practice to create a dedicated user and group for
+# running httpd, as with most system services.
+#
+-User apache
+-Group apache
+
++User vuls
++Group vuls
+
+```
+
+### Step5. The setting to make a CGI operate
 
 1. Copy the sample configuration file for apache configuration folder.
  - vulsrepo/dist/cgi/vulsrepo.conf.sample
@@ -60,7 +83,7 @@ $ sudo git clone https://github.com/usiusi360/vulsrepo.git
 
 3. Restart http server
 
-### Step5. Link to vuls results folder
+### Step6. Link to vuls results folder
 
 ````
 $ cd /var/www/html/vulsrepo/
