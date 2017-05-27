@@ -1,5 +1,4 @@
 .project
 dist/cgi/test.json
 results/*
-
-
+.vscode/*
